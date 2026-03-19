@@ -10,15 +10,15 @@ async function uploadFile(userId, fileName, size, hash) {
         await client.query("BEGIN")
 
         // lock user rows to prevent race conditions
-        const usageResult = await client.query(
-            `SELECT COALESCE(SUM(size), 0) AS used
-       FROM user_files
-       WHERE user_id = $1 AND deleted_at IS NULL
-       FOR UPDATE`,
+        const rowsResult = await client.query(
+            `SELECT size
+   FROM user_files
+   WHERE user_id = $1 AND deleted_at IS NULL
+   FOR UPDATE`,
             [userId]
         )
 
-        const used = Number(usageResult.rows[0].used)
+        const used = rowsResult.rows.reduce((sum, row) => sum + Number(row.size), 0)
 
         if (used + size > STORAGE_LIMIT) {
             throw new Error("Storage limit exceeded")
