@@ -1,6 +1,6 @@
 
 const pool = require("../db/pool")
-const { STORAGE_LIMIT } = require("../utils/constants")
+const { STORAGE_LIMIT } = require("../utils/constant")
 
 // upload File (with transaction + locking)
 async function uploadFile(userId, fileName, size, hash) {
