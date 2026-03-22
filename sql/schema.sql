@@ -35,8 +35,7 @@ CREATE INDEX idx_files_hash
 ON files(file_hash);
 
 
-INSERT INTO users(name)
-VALUES
-('User 1'),
-('User 2'),
-('User 3');
+INSERT INTO users (id, name) VALUES
+(1, 'User One'),
+(2, 'User Two'),
+(3, 'User Three');
