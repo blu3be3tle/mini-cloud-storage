@@ -163,7 +163,7 @@ Contributions are welcome!
 
 ## 📄 License
 
-MIT © 2026 Abu Ratin
+MIT © 2026 Abu Ratin Shoeb
 
 Built with focus on correctness, concurrency safety, and clean architecture.
 
