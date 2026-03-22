@@ -123,6 +123,8 @@ Server runs on `http://localhost:3000` by default.
 }
 ```
 
+Note: `file_hash` is treated as an opaque string. Prefixes like `sha256:` are optional and not enforced.
+
 All endpoints expect `userId` as URL param (for simplicity in this demo).
 
 ## 🧪 Testing
@@ -131,13 +133,37 @@ All endpoints expect `userId` as URL param (for simplicity in this demo).
 2. Update environment variables (base URL, user IDs…)
 3. Run requests or the full collection runner
 
-> **Tip**: Because of unique filename + hash constraints, repeated runs with static data may fail. Use dynamic values (UUIDs, timestamps) or reset DB state.
+> **Tip**: Because of unique filename + hash constraints, repeated runs with static data may fail. Use dynamic values (UUIDs, timestamps) or reset DB state. Use dynamic filenames (e.g. timestamps) in Postman to avoid conflicts across runs.
+
+## ❗ Error Handling
+
+Example responses:
+
+**Storage limit exceeded**
+
+```json
+{ "error": "Storage limit exceeded" }
+```
+
+**Duplicate file name**
+
+```json
+{ "error": "File with same name already exists" }
+```
+
+**File not found**
+
+```json
+{ "error": "File not found" }
+```
 
 ## 🗝 Key Design Choices
 
 - **Two-table approach** (`files` + `user_files`) → enables safe deduplication
 - **Application-level quota check inside transaction** → simplest correct solution without triggers
 - **Soft deletes** → `deleted_at` timestamp → quota calculation ignores deleted entries
+- **Upload timestamp tracking** → `uploaded_at` column records when a file was uploaded
+- **Unique filenames per user** → enforced at application level to prevent conflicts
 - **No physical file storage** → this demo focuses on metadata & concurrency (easy to extend to disk/S3)
 
 ## 🚀 Scaling & Production Notes
