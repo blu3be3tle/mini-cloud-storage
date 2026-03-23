@@ -135,6 +135,42 @@ All endpoints expect `userId` as URL param (for simplicity in this demo).
 
 > **Tip**: Because of unique filename + hash constraints, repeated runs with static data may fail. Use dynamic values (UUIDs, timestamps) or reset DB state. Use dynamic filenames (e.g. timestamps) in Postman to avoid conflicts across runs.
 
+## 📡 API Usage Examples
+
+### Using curl
+
+#### Upload File
+
+```bash
+curl -X POST http://localhost:3000/users/1/files \
+-H "Content-Type: application/json" \
+-d '{
+  "file_name": "file_'$(date +%s)'.png",
+  "size": 1000000,
+  "file_hash": "hash123"
+}'
+```
+
+#### List Files
+
+```bash
+curl http://localhost:3000/users/1/files
+```
+
+#### Storage Summary
+
+```bash
+curl http://localhost:3000/users/1/storage-summary
+```
+
+#### Delete File
+
+```bash
+curl -X DELETE http://localhost:3000/users/1/files/1
+```
+
+> Replace 1 with the actual file ID returned from upload.
+
 ## ❗ Error Handling
 
 Example responses:
